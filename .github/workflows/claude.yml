@@ -1,4 +1,4 @@
-name: Claude Fork PR PoC
+name: F-001 Fork PR Runtime Validation
 
 on:
   issue_comment:
@@ -9,6 +9,7 @@ permissions:
   contents: write
   pull-requests: write
   issues: write
+  id-token: write
 
 jobs:
   claude:
@@ -19,13 +20,36 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout
+      - name: Checkout base repository
         uses: actions/checkout@v6
         with:
           fetch-depth: 0
 
-      - name: Run Claude Code
+      - name: Run Claude Code Action
+        id: claude
+        continue-on-error: true
         uses: anthropics/claude-code-action@v1
         with:
           anthropic_api_key: ${{ secrets.ANTHROPIC_API_KEY }}
-          github_token: ${{ github.token }}
+
+      - name: Inspect vulnerable post-action state
+        if: always()
+        shell: bash
+        run: |
+          set -euxo pipefail
+
+          echo "=== CURRENT BRANCH ==="
+          git branch --show-current
+
+          echo "=== HEAD ==="
+          git log --oneline --decorate -5
+
+          echo "=== WORKTREE ==="
+          git status --short
+
+          echo "=== REMOTE REPOSITORY (credentials redacted) ==="
+          git remote get-url origin \
+            | sed -E 's#https://[^@]+@github.com/#https://REDACTED@github.com/#'
+
+          echo "=== ALL LOCAL BRANCHES ==="
+          git branch -avv
