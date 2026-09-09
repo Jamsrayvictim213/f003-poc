@@ -1,0 +1,15 @@
+name: Claude PR Action
+
+on:
+  issue_comment:
+    types: [created]
+
+jobs:
+  claude:
+    if: github.event.issue.pull_request && contains(github.event.comment.body, '@claude')
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      # Jalankan action/codebase vulnerable yang sedang kamu tes di sini
