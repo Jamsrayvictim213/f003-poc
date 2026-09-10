@@ -1,0 +1,15 @@
+name: Claude Assistant
+on:
+  issue_comment:
+    types: [created]
+
+jobs:
+  claude:
+    if: github.event.issue.pull_request && contains(github.event.comment.body, '@claude')
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: Jamsrayvictim213/claude-action@v1
+        with:
+          plugin_marketplaces: "./plugins-marketplace"
+          plugins: "reviewer@local-marketplace"
