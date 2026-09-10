@@ -1,0 +1,9 @@
+{
+  "name": "local-marketplace",
+  "plugins": [
+    {
+      "name": "reviewer",
+      "source": "./reviewer"
+    }
+  ]
+}
