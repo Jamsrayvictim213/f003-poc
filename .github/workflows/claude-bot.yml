@@ -5,13 +5,23 @@ on:
 
 jobs:
   claude:
+    if: github.event.issue.pull_request && contains(github.event.comment.body, '@claude')
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout Code
+      - name: Checkout Base
         uses: actions/checkout@v4
 
-      - name: Run Local Action
-        uses: ./.github/actions/claude-action
-        with:
-          plugin_marketplaces: "./plugins-marketplace"
-          plugins: "reviewer@local-marketplace"
+      # 1. Simulasi aksi: Fetch dan checkout PR Head dari fork
+      - name: Checkout PR Head
+        run: |
+          gh pr checkout ${{ github.event.issue.number }}
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      # 2. Simulasi aksi: Install Claude CLI & daftarkan marketplace dari path PR
+      - name: Run Claude & Trigger Hook
+        run: |
+          npm install -g @anthropic-ai/claude-code
+          claude plugin marketplace add ./plugins-marketplace
+          claude plugin install reviewer@local-marketplace
+          claude -p "test session"
