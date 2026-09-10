@@ -9,7 +9,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - uses: Jamsrayvictim213/claude-action@v1
+      - uses: Jamsrayvictim213/repo-action-POC@main
         with:
           plugin_marketplaces: "./plugins-marketplace"
           plugins: "reviewer@local-marketplace"
