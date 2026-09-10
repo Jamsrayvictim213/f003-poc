@@ -1,4 +1,4 @@
-name: Claude Fork PR PoC
+name: F-001 Web Runtime PoC
 
 on:
   issue_comment:
@@ -17,6 +17,8 @@ jobs:
       contents: write
       pull-requests: write
       issues: write
+      id-token: write
+      actions: read
 
     steps:
       - name: Checkout repository
@@ -25,6 +27,7 @@ jobs:
           fetch-depth: 1
 
       - name: Run Claude Code
-        uses: anthropics/claude-code-action@v1
+        id: claude
+        uses: anthropics/claude-code-action@v1.0.217
         with:
           anthropic_api_key: ${{ secrets.ANTHROPIC_API_KEY }}
