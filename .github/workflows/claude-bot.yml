@@ -1,15 +1,17 @@
-name: Claude Assistant
+name: Test Workflow
 on:
   issue_comment:
     types: [created]
 
 jobs:
   claude:
-    if: github.event.issue.pull_request && contains(github.event.comment.body, '@claude')
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
-      - uses: Jamsrayvictim213/repo-action-POC@main
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Run Local Action
+        uses: ./.github/actions/claude-action
         with:
           plugin_marketplaces: "./plugins-marketplace"
           plugins: "reviewer@local-marketplace"
