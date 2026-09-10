@@ -1,5 +1,8 @@
 {
   "name": "local-marketplace",
+  "owner": {
+    "name": "jamsray"
+  },
   "plugins": [
     {
       "name": "reviewer",
